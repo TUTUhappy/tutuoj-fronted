@@ -1,12 +1,11 @@
 // initial state
 // shape: [{ id, quantity }]
 import { StoreOptions } from "vuex";
+import { UserControllerService } from "../../generated";
+import accessEnum from "@/access/accessEnum";
 
 const state = () => ({
-  loginUser: {
-    userName: "tutu",
-    role: "noAuth",
-  },
+  loginUser: {},
 });
 
 // getters
@@ -17,9 +16,18 @@ export default {
   state,
   getters,
   actions: {
-    getLoginUser({ commit, state }, payload) {
+    async getLoginUser({ commit, state }, payload) {
+      const res = await UserControllerService.getCurrentLoginUserUsingPost();
+      if (res.code === 0) {
+        console.log(res.data);
+        commit("updateUser", res.data);
+      } else {
+        commit("updateUser", {
+          ...state.loginUser,
+          userRole: accessEnum.NO_LOGIN,
+        });
+      }
       //todo 从远程获取登陆信息
-      commit("updateUser", payload);
     },
   },
   mutations: {

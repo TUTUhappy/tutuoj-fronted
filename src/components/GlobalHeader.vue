@@ -1,10 +1,5 @@
 <template>
-  <a-row
-    id="globalHeader"
-    class="grid-demo"
-    style="margin-bottom: 16px"
-    align="center"
-  >
+  <a-row id="globalHeader" class="grid-demo" align="center" :wrap="false">
     <a-col flex="auto">
       <a-menu
         mode="horizontal"
@@ -21,7 +16,7 @@
             <div class="title">tutuOj</div>
           </div>
         </a-menu-item>
-        <a-menu-item v-for="item in routes" :key="item.path">
+        <a-menu-item v-for="item in accessRoutes" :key="item.path">
           {{ item.name }}
         </a-menu-item>
       </a-menu>
@@ -37,8 +32,9 @@
 <script setup lang="ts">
 import { routes } from "@/router/routes";
 import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
+import checkAccess from "@/access/checkAccess";
 
 const store = useStore();
 const selectKey = ref(["/"]);
@@ -47,12 +43,24 @@ router.afterEach((to, from, failure) => {
   selectKey.value = [to.path];
 });
 
-setTimeout(() => {
-  store.dispatch("user/getLoginUser", {
-    userName: "tutu2",
-    role: "admin",
+const accessRoutes = computed(() => {
+  return routes.filter((item, index) => {
+    if (!checkAccess(store.state.user.loginUser, item?.meta?.access)) {
+      return false;
+    }
+    if (item.meta?.hiddenView) {
+      return false;
+    }
+    return true;
   });
-}, 3000);
+});
+
+// setTimeout(() => {
+//   store.dispatch("user/getLoginUser", {
+//     userName: "tutu2",
+//     userRole: "admin",
+//   });
+// }, 3000);
 
 const onClickMenue = (val: string) => {
   router.push({
