@@ -48,6 +48,9 @@ const accessRoutes = computed(() => {
     if (!checkAccess(store.state.user.loginUser, item?.meta?.access)) {
       return false;
     }
+    // if (item.meta?.access === "admin") {
+    //   return false;
+    // }
     if (item.meta?.hiddenView) {
       return false;
     }

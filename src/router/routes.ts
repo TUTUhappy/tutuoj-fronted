@@ -5,12 +5,21 @@ import NoAuthView from "@/views/NoAuthView.vue";
 import UserLayout from "@/layouts/UserLayout.vue";
 import UserLoginView from "@/views/user/UserLoginView.vue";
 import UserRegisterView from "@/views/user/UserRegisterView.vue";
+import CodeView from "@/views/CodeView.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "浏览题目",
     component: HomeView,
+  },
+  {
+    path: "/code",
+    name: "题目",
+    component: CodeView,
+    meta: {
+      access: "user",
+    },
   },
   {
     path: "/user",
@@ -36,6 +45,9 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/noAuth",
     name: "无权限",
     component: NoAuthView,
+    meta: {
+      hiddenView: "true",
+    },
   },
   {
     path: "/admin",

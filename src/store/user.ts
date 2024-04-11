@@ -4,17 +4,14 @@ import { StoreOptions } from "vuex";
 import { UserControllerService } from "../../generated";
 import accessEnum from "@/access/accessEnum";
 
-const state = () => ({
-  loginUser: {},
-});
-
 // getters
 const getters = {};
 
 export default {
   namespaced: true,
-  state,
-  getters,
+  state: () => ({
+    loginUser: {},
+  }),
   actions: {
     async getLoginUser({ commit, state }, payload) {
       const res = await UserControllerService.getCurrentLoginUserUsingPost();
@@ -27,7 +24,6 @@ export default {
           userRole: accessEnum.NO_LOGIN,
         });
       }
-      //todo 从远程获取登陆信息
     },
   },
   mutations: {

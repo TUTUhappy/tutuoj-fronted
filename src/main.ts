@@ -11,18 +11,18 @@ import { UserControllerService } from "../generated";
 createApp(App).use(router).use(ArcoVue).use(store).mount("#app");
 
 router.beforeEach(async (to, from, next) => {
-  console.log("登陆用户信息", store.state.user.loginUser);
+  console.log("登陆用户信息", store.state.user.loginUser.username);
   const loginUser = store.state.user.loginUser;
-  // 如果从未登陆过 就调用
+  // 如果已经登陆 但是全局变量未更新 就调用一下
   if (!loginUser || !loginUser.userRole) {
+    console.log(1);
     await store.dispatch("user/getLoginUser");
   }
   const needAccess = (to.meta?.access as string) ?? accessEnum.NO_LOGIN;
   if (needAccess !== accessEnum.NO_LOGIN) {
-    if (!loginUser || !loginUser.userRole) {
+    console.log(2);
+    if (!loginUser) {
       next("/user/login");
-      store.state.user.loginUser =
-        UserControllerService.getCurrentLoginUserUsingPost();
       return;
     }
     if (!checkAccess(loginUser, needAccess)) {

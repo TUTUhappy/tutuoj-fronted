@@ -21,6 +21,9 @@
         <a-button type="primary" html-type="submit" style="width: 120px">
           登录
         </a-button>
+        <a style="padding-left: 50px" href="/user/register"
+          >如未注册,请先注册</a
+        >
       </a-form-item>
     </a-form>
   </div>
@@ -35,6 +38,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { UserControllerService } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
+
 const form = ref({
   userAccount: "",
   userPassword: "",
